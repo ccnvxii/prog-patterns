@@ -1,129 +1,153 @@
 <?php
 
 /**
- * Interface for storage systems.
- * Defines common methods that any storage implementation must provide.
+ * Інтерфейс StorageInterface
+ *
+ * Визначає спільні методи для будь-якої системи зберігання файлів.
  */
 interface StorageInterface
 {
     public function connect(): bool;
+
     public function uploadFile(string $filePath): bool;
+
     public function downloadFile(string $fileName): string;
+
     public function deleteFile(string $fileName): bool;
+
     public function deleteAllFiles(): bool;
+
     public function listFiles(): array;
 }
 
 /**
- * LocalStorage class implements StorageInterface.
- * Simulates file operations on a local disk.
+ * Клас LocalStorage
+ *
+ * Реалізація StorageInterface для локального диску.
+ * Симулює операції з файлами на локальному сховищі.
  */
 class LocalStorage implements StorageInterface
 {
     public function connect(): bool
     {
-        echo "Connected to LocalStorage\n";
+        echo "Підключено до LocalStorage\n";
         return true;
     }
 
     public function uploadFile(string $filePath): bool
     {
-        echo "Uploading file to LocalStorage\n";
+        echo "Завантаження файлу до LocalStorage\n";
         return true;
     }
 
     public function downloadFile(string $fileName): string
     {
-        echo "Downloading file " . $fileName . " to LocalStorage\n";
+        echo "Завантаження файлу {$fileName} з LocalStorage\n";
         return "/local/path/{$fileName}";
     }
 
     public function deleteFile(string $fileName): bool
     {
-        echo "Deleting file " . $fileName . " from LocalStorage\n";
+        echo "Видалення файлу {$fileName} з LocalStorage\n";
         return true;
     }
 
     public function deleteAllFiles(): bool
     {
-        echo "Deleting all files from LocalStorage\n";
+        echo "Видалення всіх файлів з LocalStorage\n";
         return true;
     }
 
     public function listFiles(): array
     {
-        echo "Listing files from LocalStorage\n";
+        echo "Отримання списку файлів з LocalStorage\n";
         return [];
     }
 }
 
 /**
- * AmazonS3Storage class implements StorageInterface.
- * Simulates file operations on Amazon S3 cloud storage.
+ * Клас AmazonS3Storage
+ *
+ * Реалізація StorageInterface для Amazon S3.
+ * Симулює операції з файлами у хмарному сховищі Amazon S3.
  */
 class AmazonS3Storage implements StorageInterface
 {
     public function connect(): bool
     {
-        echo "Connected to AmazonS3\n";
+        echo "Підключено до AmazonS3\n";
         return true;
     }
 
     public function uploadFile(string $filePath): bool
     {
-        echo "Uploading file to AmazonS3\n";
+        echo "Завантаження файлу до AmazonS3\n";
         return true;
     }
 
     public function downloadFile(string $fileName): string
     {
-        echo "Downloading file " . $fileName . " to AmazonS3\n";
+        echo "Завантаження файлу {$fileName} з AmazonS3\n";
         return "/local/path/{$fileName}";
     }
 
     public function deleteFile(string $fileName): bool
     {
-        echo "Deleting file " . $fileName . " from AmazonS3\n";
+        echo "Видалення файлу {$fileName} з AmazonS3\n";
         return true;
     }
 
     public function deleteAllFiles(): bool
     {
-        echo "Deleting all files from AmazonS3\n";
+        echo "Видалення всіх файлів з AmazonS3\n";
         return true;
     }
 
     public function listFiles(): array
     {
-        echo "Listing files from AmazonS3\n";
+        echo "Отримання списку файлів з AmazonS3\n";
         return [];
     }
 }
 
 /**
- * Singleton StorageManager class.
- * Manages a single instance of a storage system.
- * Provides access to storage methods through the singleton instance.
+ * Клас StorageManager
+ *
+ * Сінглтон для керування системою зберігання файлів.
+ * Забезпечує доступ до методів сховища через єдиний екземпляр.
  */
 class StorageManager
 {
+    /** @var StorageManager|null Єдиний екземпляр StorageManager */
     private static ?StorageManager $instance = null;
+
+    /** @var StorageInterface Обране сховище */
     private StorageInterface $storage;
 
+    /**
+     * Приватний конструктор для сінглтона
+     *
+     * @param StorageInterface $storage Сховище для керування
+     */
     private function __construct(StorageInterface $storage)
     {
         $this->storage = $storage;
     }
 
-    private function __clone() {}
+    private function __clone()
+    {
+    }
 
     /**
-     * Returns the singleton instance of StorageManager.
-     * If instance does not exist, create it with the provided storage.
+     * Повертає єдиний екземпляр StorageManager.
+     * Якщо екземпляр не існує, створює його з переданим сховищем.
+     *
+     * @param StorageInterface $storage Сховище для керування
+     * @return StorageManager Єдиний екземпляр
      */
     public static function getInstance(StorageInterface $storage): StorageManager
     {
-        if (static::$instance == null) {
+        if (static::$instance === null) {
             static::$instance = new StorageManager($storage);
         }
         return self::$instance;
@@ -161,15 +185,15 @@ class StorageManager
 }
 
 /**
- * Demonstration of StorageManager Singleton usage.
- * Shows that only one instance exists, regardless of storage type passed.
+ * Демонстрація роботи Singleton StorageManager.
+ * Показує, що існує лише один екземпляр, незалежно від типу переданого сховища.
  */
 
-// Using LocalStorage
+// Використання LocalStorage
 $local = new LocalStorage();
 $manager1 = StorageManager::getInstance($local);
 
-echo "=== Working with LocalStorage ===\n";
+echo "=== Робота з LocalStorage ===\n";
 $manager1->connect();
 $manager1->uploadFile("report.docx");
 $manager1->downloadFile("report.docx");
@@ -179,11 +203,11 @@ $manager1->deleteAllFiles();
 
 echo "\n";
 
-// use AmazonS3Storage
+// Використання AmazonS3Storage
 $amazon = new AmazonS3Storage();
 $manager2 = StorageManager::getInstance($amazon);
 
-echo "=== Working with AmazonS3 ===\n";
+echo "=== Робота з AmazonS3 ===\n";
 $manager2->connect();
 $manager2->uploadFile("photo.png");
 $manager2->downloadFile("photo.png");
@@ -192,9 +216,9 @@ $manager2->deleteFile("photo.png");
 $manager2->deleteAllFiles();
 
 if ($manager1 === $manager2) {
-    echo "\nStorageManager works as a Singleton (only one instance exists)\n";
+    echo "\nStorageManager працює як Singleton (існує лише один екземпляр)\n";
 } else {
-    echo "\nSingleton failed — multiple instances exist\n";
+    echo "\nSingleton не спрацював — існують декілька екземплярів\n";
 }
 
 ?>

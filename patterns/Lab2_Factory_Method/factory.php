@@ -1,24 +1,31 @@
 <?php
+
 /**
- * Інтерфейс для підключення до соцмережі
+ * Інтерфейс SocialNetworkConnector
+ *
+ * Визначає спільні методи для підключення до соціальної мережі.
  */
 interface SocialNetworkConnector
 {
     public function login(): void;
+
     public function logout(): void;
+
     public function createPost(string $content): void;
 }
 
 /**
- * Абстрактний клас "Фабрика"
+ * Абстрактна "Фабрика" SocialNetworkPoster
+ *
+ * Визначає метод отримання конектора та публікації повідомлення.
  */
-abstract class SocialNetworkPoster{
+abstract class SocialNetworkPoster
+{
     abstract public function getConnector(): SocialNetworkConnector;
+
     public function post(string $content): void
     {
-        // Отримуємо конектор
         $connector = $this->getConnector();
-        // Імітація логіну, публікації та виходу
         $connector->login();
         $connector->createPost($content);
         $connector->logout();
@@ -31,12 +38,9 @@ abstract class SocialNetworkPoster{
 class FacebookPoster extends SocialNetworkPoster
 {
     private string $login;
+
     private string $password;
 
-    /**
-     * @param string $login
-     * @param string $password
-     */
     public function __construct(string $login, string $password)
     {
         $this->login = $login;
@@ -70,7 +74,7 @@ class LinkedInPoster extends SocialNetworkPoster
 }
 
 /**
- * Конкретний продукт: Facebook
+ * Конкретний продукт: конектор для Facebook
  */
 class FacebookConnector implements SocialNetworkConnector
 {
@@ -95,12 +99,12 @@ class FacebookConnector implements SocialNetworkConnector
 
     public function createPost(string $content): void
     {
-        echo "Facebook: публікація повідомлення:'{$content}' \n";
+        echo "Facebook: публікація повідомлення: '{$content}'\n";
     }
 }
 
 /**
- * Конкретний продукт: LinkedIn
+ * Конкретний продукт: конектор для LinkedIn
  */
 class LinkedInConnector implements SocialNetworkConnector
 {
@@ -125,21 +129,26 @@ class LinkedInConnector implements SocialNetworkConnector
 
     public function createPost(string $content): void
     {
-        echo "LinkedIn: публікація повідомлення: '{$content}' \n";
+        echo "LinkedIn: публікація повідомлення: '{$content}'\n";
     }
 }
 
 /**
- * Демонстрація роботи
+ * Демонстраційна функція клієнта
+ *
+ * Використовує фабричний метод для публікації посту.
+ *
+ * @param SocialNetworkPoster $poster Фабрика для соцмережі
  */
 function clientCode(SocialNetworkPoster $poster)
 {
     $poster->post("Пост через фабричний метод!");
 }
 
-// Використання
+// Демонстрація роботи з Facebook
 echo "--- Facebook ---\n";
 clientCode(new FacebookPoster("pupupu...", "12345"));
 
+// Демонстрація роботи з LinkedIn
 echo "\n--- LinkedIn ---\n";
 clientCode(new LinkedInPoster("user@linkedin.com", "67890"));
