@@ -150,11 +150,11 @@ class SQLDirector
  * Демонстрація роботи
  */
 $pgBuilder = new PostgresQueryBuilder();
-/** Директор для PostgreSQL */
+// Директор для PostgreSQL
 $pgDirector = new SQLDirector($pgBuilder);
 echo $pgDirector->buildSimpleUserQuery() . PHP_EOL;
 
 $mySQLBuilder = new MySQLQueryBuilder();
-/** Директор для MySQL */
+// Директор для MySQL
 $mySQLDirector = new SQLDirector($mySQLBuilder);
 echo $mySQLDirector->buildSimpleUserQuery() . PHP_EOL;

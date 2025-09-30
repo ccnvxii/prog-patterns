@@ -145,10 +145,8 @@ function clientCode(SocialNetworkPoster $poster)
     $poster->post("Пост через фабричний метод!");
 }
 
-// Демонстрація роботи з Facebook
 echo "--- Facebook ---\n";
 clientCode(new FacebookPoster("pupupu...", "12345"));
 
-// Демонстрація роботи з LinkedIn
 echo "\n--- LinkedIn ---\n";
 clientCode(new LinkedInPoster("user@linkedin.com", "67890"));
