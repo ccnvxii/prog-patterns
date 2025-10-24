@@ -65,13 +65,6 @@ class CachingDownloader implements Downloader {
  * Демонстрація роботи
  */
 
-/**
- * Функція clientCode()
- *
- * Демонструє роботу клієнтського коду, який не знає, із яким саме об’єктом працює:
- * з реальним завантажувачем чи з його замісником (Proxy).
- *
- */
 function clientCode(Downloader $downloader): void
 {
     echo $downloader->download("https://example.com/file1") . "\n";

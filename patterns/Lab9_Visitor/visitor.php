@@ -2,7 +2,7 @@
 
 
 /**
- * Інтерфейс Element — елемент, який приймає відвідувача
+ * Інтерфейс Element
  */
 
 interface Element
@@ -15,7 +15,7 @@ interface Element
 
 
 /**
- * Інтерфейс Visitor — відвідувач із методами для кожного типу елементів
+ * Інтерфейс Visitor
  * */
 interface Visitor
 {
